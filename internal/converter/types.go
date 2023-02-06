@@ -88,10 +88,11 @@ func (c *Converter) convertField(curPkg *ProtoPackage, desc *descriptor.FieldDes
 		jsonSchemaType.Deprecated = deprecated;
 	}
 
-	// Write uninterpreted options to jsonschema as strings.
-	uninterpretedOptions := desc.Options.GetUninterpretedOption();
-	for _, uninterpretedOption := range uninterpretedOptions {
-		jsonSchemaType.OptionStrings = append(jsonSchemaType.OptionStrings, uninterpretedOption.String());
+	// Populate options as string.
+	options := desc.GetOptions();
+	if options != nil && proto.HasExtension(options, protos.E_FieldOptions) {
+		fieldOptionsValues := proto.GetExtension(options, protos.E_FieldOptions);
+		jsonSchemaType.Options = fieldOptionsValues.(*protos.FieldOptions).String();
 	}
 
 	// Switch the types, and pick a JSONSchema equivalent:

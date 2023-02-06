@@ -83,6 +83,7 @@ type Type struct {
 	ExclusiveGroups      []*Type                `json:"exclusiveGroups,omitempty"`      // custom
 	Deprecated           bool                   `json:"deprecated,omitempty"`           // custom
 	OptionStrings        []string               `json:"optionStrings,omitempty"`        // custom
+	Options              string                 `json:"options,omitempty"`              // custom
 	Not                  *Type                  `json:"not,omitempty"`                  // section 5.25
 	Definitions          Definitions            `json:"definitions,omitempty"`          // section 5.26
 	// RFC draft-wright-json-schema-validation-00, section 6, 7
