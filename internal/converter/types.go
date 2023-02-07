@@ -83,16 +83,9 @@ func (c *Converter) convertField(curPkg *ProtoPackage, desc *descriptor.FieldDes
 	}
 
 	// Write deprecated option to the jsonschema, for deprecated fields.
-	deprecated := desc.Options.GetDeprecated();
+	deprecated := desc.Options.GetDeprecated()
 	if deprecated {
-		jsonSchemaType.Deprecated = deprecated;
-	}
-
-	// Populate options as string.
-	options := desc.GetOptions();
-	if options != nil && proto.HasExtension(options, protos.E_FieldOptions) {
-		fieldOptionsValues := proto.GetExtension(options, protos.E_FieldOptions);
-		jsonSchemaType.Options = fieldOptionsValues.(*protos.FieldOptions).String();
+		jsonSchemaType.Deprecated = deprecated
 	}
 
 	// Switch the types, and pick a JSONSchema equivalent:
@@ -577,7 +570,7 @@ func (c *Converter) recursiveConvertMessageType(curPkg *ProtoPackage, msgDesc *d
 	// Write the oneof declaration names to the jsonschema.
 	if c.Flags.EnforceOneofDeclarations {
 		for _, oneofDesc := range msgDesc.OneofDecl {
-			jsonSchemaType.OneofNames = append(jsonSchemaType.OneofNames, *oneofDesc.Name);
+			jsonSchemaType.OneofNames = append(jsonSchemaType.OneofNames, *oneofDesc.Name)
 		}
 	}
 
