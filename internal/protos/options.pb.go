@@ -11,9 +11,9 @@
 package protos
 
 import (
-	descriptor "github.com/golang/protobuf/protoc-gen-go/descriptor"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
+	descriptorpb "google.golang.org/protobuf/types/descriptorpb"
 	reflect "reflect"
 	sync "sync"
 )
@@ -41,6 +41,10 @@ type FieldOptions struct {
 	MaxLength int32 `protobuf:"varint,4,opt,name=max_length,json=maxLength,proto3" json:"max_length,omitempty"`
 	// Fields tagged with this will constrain strings using the "pattern" keyword in generated schemas
 	Pattern string `protobuf:"bytes,5,opt,name=pattern,proto3" json:"pattern,omitempty"`
+
+	IgnoreInAutocomplete bool `protobuf:"bytes,50000,opt,name=ignoreInAutocomplete,proto3" json:"ignoreInAutocomplete,omitempty"`
+
+	IsRequired bool `protobuf:"bytes,50001,opt,name=isRequired,proto3" json:"isRequired,omitempty"`
 }
 
 func (x *FieldOptions) Reset() {
@@ -331,7 +335,7 @@ func (x *EnumOptions) GetIgnore() bool {
 
 var file_options_proto_extTypes = []protoimpl.ExtensionInfo{
 	{
-		ExtendedType:  (*descriptor.FieldOptions)(nil),
+		ExtendedType:  (*descriptorpb.FieldOptions)(nil),
 		ExtensionType: (*FieldOptions)(nil),
 		Field:         1125,
 		Name:          "protoc.gen.jsonschema.field_options",
@@ -339,7 +343,7 @@ var file_options_proto_extTypes = []protoimpl.ExtensionInfo{
 		Filename:      "options.proto",
 	},
 	{
-		ExtendedType:  (*descriptor.FieldOptions)(nil),
+		ExtendedType:  (*descriptorpb.FieldOptions)(nil),
 		ExtensionType: (*bool)(nil),
 		Field:         50000,
 		Name:          "protoc.gen.jsonschema.ignore_in_autocomplete",
@@ -347,7 +351,7 @@ var file_options_proto_extTypes = []protoimpl.ExtensionInfo{
 		Filename:      "options.proto",
 	},
 	{
-		ExtendedType:  (*descriptor.FieldOptions)(nil),
+		ExtendedType:  (*descriptorpb.FieldOptions)(nil),
 		ExtensionType: (*bool)(nil),
 		Field:         50001,
 		Name:          "protoc.gen.jsonschema.is_required",
@@ -355,7 +359,7 @@ var file_options_proto_extTypes = []protoimpl.ExtensionInfo{
 		Filename:      "options.proto",
 	},
 	{
-		ExtendedType:  (*descriptor.FileOptions)(nil),
+		ExtendedType:  (*descriptorpb.FileOptions)(nil),
 		ExtensionType: (*FileOptions)(nil),
 		Field:         1126,
 		Name:          "protoc.gen.jsonschema.file_options",
@@ -363,7 +367,7 @@ var file_options_proto_extTypes = []protoimpl.ExtensionInfo{
 		Filename:      "options.proto",
 	},
 	{
-		ExtendedType:  (*descriptor.MessageOptions)(nil),
+		ExtendedType:  (*descriptorpb.MessageOptions)(nil),
 		ExtensionType: (*MessageOptions)(nil),
 		Field:         1127,
 		Name:          "protoc.gen.jsonschema.message_options",
@@ -371,7 +375,7 @@ var file_options_proto_extTypes = []protoimpl.ExtensionInfo{
 		Filename:      "options.proto",
 	},
 	{
-		ExtendedType:  (*descriptor.EnumOptions)(nil),
+		ExtendedType:  (*descriptorpb.EnumOptions)(nil),
 		ExtensionType: (*EnumOptions)(nil),
 		Field:         1128,
 		Name:          "protoc.gen.jsonschema.enum_options",
@@ -380,7 +384,7 @@ var file_options_proto_extTypes = []protoimpl.ExtensionInfo{
 	},
 }
 
-// Extension fields to descriptor.FieldOptions.
+// Extension fields to descriptorpb.FieldOptions.
 var (
 	// optional protoc.gen.jsonschema.FieldOptions field_options = 1125;
 	E_FieldOptions = &file_options_proto_extTypes[0]
@@ -390,19 +394,19 @@ var (
 	E_IsRequired = &file_options_proto_extTypes[2]
 )
 
-// Extension fields to descriptor.FileOptions.
+// Extension fields to descriptorpb.FileOptions.
 var (
 	// optional protoc.gen.jsonschema.FileOptions file_options = 1126;
 	E_FileOptions = &file_options_proto_extTypes[3]
 )
 
-// Extension fields to descriptor.MessageOptions.
+// Extension fields to descriptorpb.MessageOptions.
 var (
 	// optional protoc.gen.jsonschema.MessageOptions message_options = 1127;
 	E_MessageOptions = &file_options_proto_extTypes[4]
 )
 
-// Extension fields to descriptor.EnumOptions.
+// Extension fields to descriptorpb.EnumOptions.
 var (
 	// optional protoc.gen.jsonschema.EnumOptions enum_options = 1128;
 	E_EnumOptions = &file_options_proto_extTypes[5]
@@ -514,10 +518,10 @@ var file_options_proto_goTypes = []interface{}{
 	(*FileOptions)(nil),               // 1: protoc.gen.jsonschema.FileOptions
 	(*MessageOptions)(nil),            // 2: protoc.gen.jsonschema.MessageOptions
 	(*EnumOptions)(nil),               // 3: protoc.gen.jsonschema.EnumOptions
-	(*descriptor.FieldOptions)(nil),   // 4: google.protobuf.FieldOptions
-	(*descriptor.FileOptions)(nil),    // 5: google.protobuf.FileOptions
-	(*descriptor.MessageOptions)(nil), // 6: google.protobuf.MessageOptions
-	(*descriptor.EnumOptions)(nil),    // 7: google.protobuf.EnumOptions
+	(*descriptorpb.FieldOptions)(nil),   // 4: google.protobuf.FieldOptions
+	(*descriptorpb.FileOptions)(nil),    // 5: google.protobuf.FileOptions
+	(*descriptorpb.MessageOptions)(nil), // 6: google.protobuf.MessageOptions
+	(*descriptorpb.EnumOptions)(nil),    // 7: google.protobuf.EnumOptions
 }
 var file_options_proto_depIdxs = []int32{
 	4,  // 0: protoc.gen.jsonschema.field_options:extendee -> google.protobuf.FieldOptions
