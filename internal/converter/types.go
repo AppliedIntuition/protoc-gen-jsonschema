@@ -88,6 +88,18 @@ func (c *Converter) convertField(curPkg *ProtoPackage, desc *descriptor.FieldDes
 		jsonSchemaType.Deprecated = deprecated
 	}
 
+	// Populate options as string.
+	options := desc.GetOptions()
+	if options != nil && proto.HasExtension(options, protos.E_IsRequired) {
+		fieldOptionsValues := proto.GetExtension(options, protos.E_IsRequired)
+		if fieldOptionsValues.(bool) {
+			if jsonSchemaType.Options == nil {
+				jsonSchemaType.Options = &jsonschema.Type{}
+			}
+			jsonSchemaType.Options.IsRequired = fieldOptionsValues.(bool)
+		}
+	}
+
 	// Switch the types, and pick a JSONSchema equivalent:
 	switch desc.GetType() {
 

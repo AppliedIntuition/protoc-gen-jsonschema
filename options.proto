@@ -78,6 +78,13 @@ message EnumOptions {
 
 extend google.protobuf.FieldOptions {
   FieldOptions field_options = 1125;
+
+  // Custom Options
+
+  bool ignore_in_autocomplete = 50000;
+
+  bool is_required = 50001;
+
 }
 
 extend google.protobuf.FileOptions {
