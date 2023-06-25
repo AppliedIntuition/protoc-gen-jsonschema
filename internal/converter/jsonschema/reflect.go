@@ -84,7 +84,6 @@ type Type struct {
 	Deprecated           bool                   `json:"deprecated,omitempty"`           // custom
 	OptionStrings        []string               `json:"optionStrings,omitempty"`        // custom
 	Options              *Type                  `json:"options,omitempty"`              // custom
-	IsRequired           bool                   `json:"isRequired,omitempty"`           // custom
 	ManualLink           string                 `json:"manualLink,omitempty"`           // custom
 	Not                  *Type                  `json:"not,omitempty"`                  // section 5.25
 	Definitions          Definitions            `json:"definitions,omitempty"`          // section 5.26

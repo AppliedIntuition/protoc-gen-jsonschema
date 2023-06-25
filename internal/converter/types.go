@@ -90,17 +90,6 @@ func (c *Converter) convertField(curPkg *ProtoPackage, desc *descriptor.FieldDes
 
 	// Populate options as string.
 	options := desc.GetOptions()
-	if options != nil && proto.HasExtension(options, protos.E_IsRequired) {
-		fieldOptionsValues := proto.GetExtension(options, protos.E_IsRequired)
-		// Only set is_required if its value is true (no need to set is_required = false everywhere)
-		if fieldOptionsValues.(bool) {
-			if jsonSchemaType.Options == nil {
-				jsonSchemaType.Options = &jsonschema.Type{}
-			}
-			jsonSchemaType.Options.IsRequired = fieldOptionsValues.(bool)
-		}
-	}
-
 	if options != nil && proto.HasExtension(options, protos.E_ManualLink) {
 		fieldOptionsValues := proto.GetExtension(options, protos.E_ManualLink)
 		if jsonSchemaType.Options == nil {
