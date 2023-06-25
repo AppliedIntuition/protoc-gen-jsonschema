@@ -39,6 +39,12 @@ const JSONFields = `{
                     "options": {
                         "isRequired": true
                     }
+                },
+                "withManual": {
+                    "type": "integer",
+                    "options": {
+                        "manualLink": "manual-link"
+                    }
                 }
             },
             "additionalProperties": true,

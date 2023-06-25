@@ -85,6 +85,7 @@ extend google.protobuf.FieldOptions {
 
   bool is_required = 50001;
 
+  string manual_link = 50015;
 }
 
 extend google.protobuf.FileOptions {
