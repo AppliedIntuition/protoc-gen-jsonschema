@@ -81,8 +81,6 @@ extend google.protobuf.FieldOptions {
 
   // Custom Options
 
-  bool ignore_in_autocomplete = 50000;
-
   string manual_link = 50015;
 }
 
