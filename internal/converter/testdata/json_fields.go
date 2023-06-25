@@ -34,9 +34,6 @@ const JSONFields = `{
                     "type": "integer",
                     "deprecated": true
                 },
-                "customFld": {
-                    "type": "integer"
-                },
                 "withManual": {
                     "type": "integer",
                     "options": {
