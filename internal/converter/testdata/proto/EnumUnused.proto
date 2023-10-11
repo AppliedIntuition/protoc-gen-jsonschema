@@ -1,0 +1,12 @@
+syntax = "proto3";
+package samples;
+
+message MessageUnusedEnum {
+  bool var = 1;
+
+  enum NestedEnum {
+    Foo = 0;
+    Bar = 1;
+    Baz = 2;
+  }
+}
