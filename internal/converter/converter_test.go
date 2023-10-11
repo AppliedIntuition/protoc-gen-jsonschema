@@ -211,6 +211,16 @@ func configureSampleProtos() map[string]sampleProto {
 			FilesToGenerate:       []string{"EnumReference.proto"},
 			ProtoFileName:         "EnumReference.proto",
 		},
+		"EnumUnused": {
+			ExpectedJSONSchema:    []string{testdata.MessageUnusedEnum},
+			FilesToGenerate:       []string{"EnumUnused.proto"},
+			ProtoFileName:         "EnumUnused.proto",
+		},
+		"MessageUnused": {
+			ExpectedJSONSchema:    []string{testdata.MessageUnusedMessage},
+			FilesToGenerate:       []string{"MessageUnused.proto"},
+			ProtoFileName:         "MessageUnused.proto",
+		},
 		"EnumWithMessage": {
 			ExpectedJSONSchema:    []string{testdata.EnumWithMessageEnum, testdata.EnumWithMessage},
 			FilesToGenerate:       []string{"EnumWithMessage.proto"},

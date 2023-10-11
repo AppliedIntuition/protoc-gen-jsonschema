@@ -516,6 +516,14 @@ func (c *Converter) recursiveFindNestedMessages(curPkg *ProtoPackage, msgDesc *d
 		}
 	}
 
+	for _, desc := range msgDesc.GetNestedType() {
+		newTypeName := c.getUpdatedTypeName(curPkg, typeName, desc.GetName())
+		
+		if err := c.recursiveFindNestedMessages(curPkg, desc, newTypeName, nestedMessages); err != nil {
+			return err
+		}
+	}
+
 	return nil
 }
 
@@ -564,6 +572,10 @@ func (c *Converter) recursiveFindNestedEnums(curPkg *ProtoPackage, msgDesc *desc
 			}
 			nestedEnums[recordType] = typeName
 		}
+	}
+
+	for _, desc := range msgDesc.GetEnumType() {
+		nestedEnums[desc] = c.getUpdatedTypeName(curPkg, typeName, desc.GetName())
 	}
 
 	return nil
@@ -790,4 +802,14 @@ func dedupe(inputStrings []string) []string {
 		}
 	}
 	return outputStrings
+}
+
+
+func (c *Converter) getUpdatedTypeName(curPkg *ProtoPackage, typeName string, descName string) string {
+	if !strings.Contains(typeName, ".") {
+		_, pkgName, _ := c.lookupType(curPkg, typeName)
+		return fmt.Sprintf("%s.%s.%s", pkgName, typeName, descName)
+	} else {
+		return fmt.Sprintf("%s.%s", typeName, descName)
+	}
 }

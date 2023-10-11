@@ -1,0 +1,10 @@
+syntax = "proto3";
+package samples;
+
+message MessageUnusedMessage {
+  bool var = 1;
+
+  message NestedMessage {
+    bool foo = 1;
+  }
+}
