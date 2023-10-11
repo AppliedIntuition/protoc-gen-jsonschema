@@ -3,6 +3,7 @@ package testdata
 const Proto2NestedMessage = `{
     "$schema": "http://json-schema.org/draft-04/schema#",
     "$ref": "#/definitions/Proto2NestedMessage",
+    "$fullRef": "#/definitions/samples.Proto2NestedMessage",
     "definitions": {
         "Proto2NestedMessage": {
             "required": [
@@ -43,6 +44,7 @@ const Proto2NestedMessage = `{
                     "type": "boolean"
                 },
                 "topology": {
+                    "$ref": "#/definitions/samples.Proto2PayloadMessage.Topology",
                     "enum": [
                         "FLAT",
                         0,
@@ -71,6 +73,31 @@ const Proto2NestedMessage = `{
             "additionalProperties": true,
             "type": "object",
             "title": "Proto 2 Payload Message"
+        },
+        "samples.Proto2PayloadMessage.Topology": {
+            "enum": [
+                "FLAT",
+                0,
+                "NESTED_OBJECT",
+                1,
+                "NESTED_MESSAGE",
+                2,
+                "ARRAY_OF_TYPE",
+                3,
+                "ARRAY_OF_OBJECT",
+                4,
+                "ARRAY_OF_MESSAGE",
+                5
+            ],
+            "oneOf": [
+                {
+                    "type": "string"
+                },
+                {
+                    "type": "integer"
+                }
+            ],
+            "title": "Topology"
         }
     }
 }`

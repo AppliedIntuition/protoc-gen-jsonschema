@@ -291,6 +291,8 @@ func (c *Converter) convertField(curPkg *ProtoPackage, desc *descriptor.FieldDes
 			jsonSchemaType.Items.Enum = jsonSchemaType.Enum
 			jsonSchemaType.Enum = nil
 			jsonSchemaType.Items.OneOf = nil
+			jsonSchemaType.Items.Ref = jsonSchemaType.Ref
+			jsonSchemaType.Ref = ""
 		} else {
 			jsonSchemaType.Items.Type = jsonSchemaType.Type
 			jsonSchemaType.Items.OneOf = jsonSchemaType.OneOf
@@ -454,11 +456,14 @@ func (c *Converter) convertMessageType(curPkg *ProtoPackage, msgDesc *descriptor
 		// Add the schema to our definitions:
 		definitions[name] = &enumSchema
 	}
+	_, pkgName, _ := c.lookupType(curPkg, msgDesc.GetName())
+	pkgName = strings.Trim(pkgName, ".")
 
 	// Put together a JSON schema with our discovered definitions, and a $ref for the root type:
 	newJSONSchema := &jsonschema.Schema{
 		Type: &jsonschema.Type{
 			Ref:     fmt.Sprintf("%s%s", c.refPrefix, msgDesc.GetName()),
+			FullRef:     fmt.Sprintf("%s%s.%s", c.refPrefix, pkgName, msgDesc.GetName()),
 			Version: c.schemaVersion,
 		},
 		Definitions: definitions,
@@ -535,7 +540,7 @@ func (c *Converter) findNestedEnums(curPkg *ProtoPackage, msgDesc *descriptor.De
 
 	// Get a list of all nested messages, and how often they occur:
 	nestedEnums := make(map[*descriptor.EnumDescriptorProto]string)
-	if err := c.recursiveFindNestedEnums(curPkg, msgDesc, msgDesc.GetName(), nestedEnums); err != nil {
+	if err := c.recursiveFindNestedEnums(curPkg, msgDesc, msgDesc.GetName(), nestedEnums, make(map[*descriptor.DescriptorProto]bool)); err != nil {
 		return nil, err
 	}
 
@@ -550,7 +555,11 @@ func (c *Converter) findNestedEnums(curPkg *ProtoPackage, msgDesc *descriptor.De
 	return result, nil
 }
 
-func (c *Converter) recursiveFindNestedEnums(curPkg *ProtoPackage, msgDesc *descriptor.DescriptorProto, typeName string, nestedEnums map[*descriptor.EnumDescriptorProto]string) error {
+func (c *Converter) recursiveFindNestedEnums(curPkg *ProtoPackage, msgDesc *descriptor.DescriptorProto, typeName string, nestedEnums map[*descriptor.EnumDescriptorProto]string, searchedMsgs map[*descriptor.DescriptorProto]bool) error {
+	if _, present := searchedMsgs[msgDesc]; present {
+		return nil
+	}
+	searchedMsgs[msgDesc] = true
 	for _, desc := range msgDesc.GetField() {
 		descType := desc.GetType()
 		typeName := desc.GetTypeName()
@@ -560,7 +569,7 @@ func (c *Converter) recursiveFindNestedEnums(curPkg *ProtoPackage, msgDesc *desc
 			if !ok {
 				return fmt.Errorf("no such message type named %s", typeName)
 			}
-			if err := c.recursiveFindNestedEnums(curPkg, recordType, typeName, nestedEnums); err != nil {
+			if err := c.recursiveFindNestedEnums(curPkg, recordType, typeName, nestedEnums, searchedMsgs); err != nil {
 				return err
 			}
 		} else if descType == descriptor.FieldDescriptorProto_TYPE_ENUM {

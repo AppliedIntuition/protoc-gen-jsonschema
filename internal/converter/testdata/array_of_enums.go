@@ -3,6 +3,7 @@ package testdata
 const ArrayOfEnums = `{
     "$schema": "http://json-schema.org/draft-04/schema#",
     "$ref": "#/definitions/ArrayOfEnums",
+    "$fullRef": "#/definitions/samples.ArrayOfEnums",
     "definitions": {
         "ArrayOfEnums": {
             "properties": {
@@ -11,6 +12,7 @@ const ArrayOfEnums = `{
                 },
                 "stuff": {
                     "items": {
+                        "$ref": "#/definitions/samples.ArrayOfEnums.inline",
                         "enum": [
                             "FOO",
                             0,
@@ -29,6 +31,27 @@ const ArrayOfEnums = `{
             "additionalProperties": true,
             "type": "object",
             "title": "Array Of Enums"
+        },
+        "samples.ArrayOfEnums.inline": {
+            "enum": [
+                "FOO",
+                0,
+                "BAR",
+                1,
+                "FIZZ",
+                2,
+                "BUZZ",
+                3
+            ],
+            "oneOf": [
+                {
+                    "type": "string"
+                },
+                {
+                    "type": "integer"
+                }
+            ],
+            "title": "Inline"
         }
     }
 }`

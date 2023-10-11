@@ -3,6 +3,7 @@ package testdata
 const ArrayOfObjects = `{
     "$schema": "http://json-schema.org/draft-04/schema#",
     "$ref": "#/definitions/ArrayOfObjects",
+    "$fullRef": "#/definitions/samples.ArrayOfObjects",
     "definitions": {
         "ArrayOfObjects": {
             "properties": {
@@ -94,6 +95,7 @@ const ArrayOfObjects = `{
                     ]
                 },
                 "topology": {
+                    "$ref": "#/definitions/samples.ArrayOfObjects.RepeatedPayload.Topology",
                     "enum": [
                         "FLAT",
                         0,
@@ -132,6 +134,34 @@ const ArrayOfObjects = `{
                 }
             ],
             "title": "Repeated Payload"
+        },
+        "samples.ArrayOfObjects.RepeatedPayload.Topology": {
+            "enum": [
+                "FLAT",
+                0,
+                "NESTED_OBJECT",
+                1,
+                "NESTED_MESSAGE",
+                2,
+                "ARRAY_OF_TYPE",
+                3,
+                "ARRAY_OF_OBJECT",
+                4,
+                "ARRAY_OF_MESSAGE",
+                5
+            ],
+            "oneOf": [
+                {
+                    "type": "string"
+                },
+                {
+                    "type": "integer"
+                },
+                {
+                    "type": "null"
+                }
+            ],
+            "title": "Topology"
         }
     }
 }`
