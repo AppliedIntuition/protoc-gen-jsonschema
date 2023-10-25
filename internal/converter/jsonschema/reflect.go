@@ -51,9 +51,9 @@ var customStructGetFieldDocString = reflect.TypeOf((*customSchemaGetFieldDocStri
 // Type represents a JSON Schema object type.
 type Type struct {
 	// RFC draft-wright-json-schema-00
-	Version string `json:"$schema,omitempty"` // section 6.1
-	Ref     string `json:"$ref,omitempty"`    // section 7
-	FullRef     string `json:"$fullRef,omitempty"`    // section 7
+	Version string `json:"$schema,omitempty"`  // section 6.1
+	Ref     string `json:"$ref,omitempty"`     // section 7
+	FullRef string `json:"$fullRef,omitempty"` // custom
 	// RFC draft-wright-json-schema-validation-00, section 5
 	MultipleOf           int                    `json:"multipleOf,omitempty"`           // section 5.1
 	Maximum              int                    `json:"maximum,omitempty"`              // section 5.2
@@ -78,6 +78,7 @@ type Type struct {
 	AdditionalProperties json.RawMessage        `json:"additionalProperties,omitempty"` // section 5.18
 	Dependencies         map[string]*Type       `json:"dependencies,omitempty"`         // section 5.19
 	Enum                 []interface{}          `json:"enum,omitempty"`                 // section 5.20
+	EnumValues           []interface{}          `json:"enumValues,omitempty"`           // custom
 	Type                 string                 `json:"type,omitempty"`                 // section 5.21
 	AllOf                []*Type                `json:"allOf,omitempty"`                // section 5.22
 	AnyOf                []*Type                `json:"anyOf,omitempty"`                // section 5.23

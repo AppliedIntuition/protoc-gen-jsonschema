@@ -8,6 +8,11 @@ const OptionEnumsTrimPrefix = `{
         "HTTP",
         "HTTPS"
     ],
+    "enumValues": [
+        0,
+        1,
+        2
+    ],
     "type": "string",
     "title": "Scheme"
 }`
