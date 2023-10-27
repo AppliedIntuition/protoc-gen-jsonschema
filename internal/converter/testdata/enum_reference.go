@@ -15,6 +15,23 @@ const EnumReference1 = `{
                 "enumFieldTwo": {
                     "$ref": "#/definitions/samples.MessageWithEnums.NestedEnum",
                     "title": "Nested Enum"
+                },
+                "enum_with_manual": {
+                    "$ref": "#/definitions/samples.EnumOne",
+                    "options": {
+                        "manualLink": "manual-link-1"
+                    },
+                    "title": "Enum One"
+                },
+                "enum_with_manual_array": {
+                    "items": {
+                        "$ref": "#/definitions/samples.EnumOne",
+                        "title": "Enum One"
+                    },
+                    "type": "array",
+                    "options": {
+                        "manualLink": "manual-link-2"
+                    }
                 }
             },
             "additionalProperties": true,

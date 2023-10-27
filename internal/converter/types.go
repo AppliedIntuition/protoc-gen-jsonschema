@@ -227,6 +227,7 @@ func (c *Converter) convertField(curPkg *ProtoPackage, desc *descriptor.FieldDes
 	// ENUM:
 	case descriptor.FieldDescriptorProto_TYPE_ENUM:
 		fieldDescription := jsonSchemaType.Description
+		options := jsonSchemaType.Options
 
 		// Go through all the enums we have, see if we can match any to this field.
 		fullEnumIdentifier := strings.TrimPrefix(desc.GetTypeName(), ".")
@@ -247,6 +248,7 @@ func (c *Converter) convertField(curPkg *ProtoPackage, desc *descriptor.FieldDes
 
 		jsonSchemaType = &enumSchema
 		jsonSchemaType.Description = fieldDescription
+		jsonSchemaType.Options = options
 		jsonSchemaType.Ref = fmt.Sprintf("%s%s", c.refPrefix, enums[matchedEnum])
 
 	// Bool:
@@ -302,7 +304,7 @@ func (c *Converter) convertField(curPkg *ProtoPackage, desc *descriptor.FieldDes
 			// Set fields in jsonSchemaType.Items
 			jsonSchemaType.Items.Title = jsonSchemaType.Title
 			jsonSchemaType.Items.Ref = jsonSchemaType.Ref
-			
+
 			// Unset fields in jsonSchemaType
 			jsonSchemaType.Title = ""
 			jsonSchemaType.Enum = nil
@@ -482,7 +484,7 @@ func (c *Converter) convertMessageType(curPkg *ProtoPackage, msgDesc *descriptor
 	newJSONSchema := &jsonschema.Schema{
 		Type: &jsonschema.Type{
 			Ref:     fmt.Sprintf("%s%s", c.refPrefix, msgDesc.GetName()),
-			FullRef:     fmt.Sprintf("%s%s.%s", c.refPrefix, pkgName, msgDesc.GetName()),
+			FullRef: fmt.Sprintf("%s%s.%s", c.refPrefix, pkgName, msgDesc.GetName()),
 			Version: c.schemaVersion,
 		},
 		Definitions: definitions,
