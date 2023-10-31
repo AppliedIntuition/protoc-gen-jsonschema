@@ -207,9 +207,9 @@ func configureSampleProtos() map[string]sampleProto {
 			ObjectsToValidatePass: []string{testdata.EnumNestedReferencePass},
 		},
 		"EnumReference": {
-			ExpectedJSONSchema:    []string{testdata.EnumReference2, testdata.EnumReference1},
-			FilesToGenerate:       []string{"EnumReference.proto"},
-			ProtoFileName:         "EnumReference.proto",
+			ExpectedJSONSchema: []string{testdata.EnumReference2, testdata.EnumReference1},
+			FilesToGenerate:    []string{"EnumReference.proto"},
+			ProtoFileName:      "EnumReference.proto",
 		},
 		"EnumWithMessage": {
 			ExpectedJSONSchema:    []string{testdata.EnumWithMessageEnum, testdata.EnumWithMessage},
@@ -253,6 +253,11 @@ func configureSampleProtos() map[string]sampleProto {
 			ProtoFileName:         "Maps.proto",
 			ObjectsToValidateFail: []string{testdata.MapsFail},
 			ObjectsToValidatePass: []string{testdata.MapsPass},
+		},
+		"MessageWithUnits": {
+			ExpectedJSONSchema: []string{testdata.MessageWithUnits},
+			FilesToGenerate:    []string{"MessageWithUnits.proto"},
+			ProtoFileName:      "MessageWithUnits.proto",
 		},
 		"NestedMessage": {
 			ExpectedJSONSchema:    []string{testdata.PayloadMessage, testdata.NestedMessage},

@@ -105,6 +105,13 @@ func (c *Converter) convertField(curPkg *ProtoPackage, desc *descriptor.FieldDes
 			}
 			jsonSchemaType.Options.IgnoreInAutocomplete = fieldOptionsValues.(bool)
 		}
+		if proto.HasExtension(options, protos.E_Units) {
+			fieldOptionsValues := proto.GetExtension(options, protos.E_Units)
+			if jsonSchemaType.Options == nil {
+				jsonSchemaType.Options = &jsonschema.Type{}
+			}
+			jsonSchemaType.Options.Units = fieldOptionsValues
+		}
 	}
 
 	// Switch the types, and pick a JSONSchema equivalent:
@@ -226,6 +233,7 @@ func (c *Converter) convertField(curPkg *ProtoPackage, desc *descriptor.FieldDes
 
 	// ENUM:
 	case descriptor.FieldDescriptorProto_TYPE_ENUM:
+		deprecated := jsonSchemaType.Deprecated
 		fieldDescription := jsonSchemaType.Description
 		options := jsonSchemaType.Options
 
@@ -250,6 +258,10 @@ func (c *Converter) convertField(curPkg *ProtoPackage, desc *descriptor.FieldDes
 		jsonSchemaType.Description = fieldDescription
 		jsonSchemaType.Options = options
 		jsonSchemaType.Ref = fmt.Sprintf("%s%s", c.refPrefix, enums[matchedEnum])
+
+		if deprecated {
+			jsonSchemaType.Deprecated = deprecated
+		}
 
 	// Bool:
 	case descriptor.FieldDescriptorProto_TYPE_BOOL:
