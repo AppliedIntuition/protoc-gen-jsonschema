@@ -9,6 +9,7 @@ const EnumReference1 = `{
             "properties": {
                 "enumFieldOne": {
                     "$ref": "#/definitions/samples.EnumOne",
+                    "deprecated": true,
                     "title": "Enum One",
                     "description": "Comment about EnumOne."
                 },
