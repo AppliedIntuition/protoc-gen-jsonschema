@@ -15,6 +15,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/AppliedIntuition/protoc-gen-jsonschema/internal/protos"
 	"github.com/iancoleman/orderedmap"
 )
 
@@ -89,7 +90,7 @@ type Type struct {
 	Options              *Type                  `json:"options,omitempty"`              // custom
 	ManualLink           string                 `json:"manualLink,omitempty"`           // custom
 	IgnoreInAutocomplete bool                   `json:"ignoreInAutocomplete,omitempty"` // custom
-	Units                interface{}            `json:"units,omitempty"`                // custom
+	Units                protos.NumericalUnits  `json:"units,omitempty"`                // custom
 	Not                  *Type                  `json:"not,omitempty"`                  // section 5.25
 	Definitions          Definitions            `json:"definitions,omitempty"`          // section 5.26
 	// RFC draft-wright-json-schema-validation-00, section 6, 7

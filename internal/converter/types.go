@@ -110,7 +110,7 @@ func (c *Converter) convertField(curPkg *ProtoPackage, desc *descriptor.FieldDes
 			if jsonSchemaType.Options == nil {
 				jsonSchemaType.Options = &jsonschema.Type{}
 			}
-			jsonSchemaType.Options.Units = fieldOptionsValues
+			jsonSchemaType.Options.Units = fieldOptionsValues.(protos.NumericalUnits)
 		}
 	}
 
