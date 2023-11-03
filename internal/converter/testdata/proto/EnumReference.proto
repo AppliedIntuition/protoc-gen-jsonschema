@@ -15,8 +15,8 @@ message MessageWithEnums {
   NestedEnum enumFieldTwo = 2;
   DefinedUsedMessage var = 3;
 
-  EnumOne enum_with_manual = 3 [(protoc.gen.jsonschema.manual_link) = "manual-link-1"];
-  repeated EnumOne enum_with_manual_array = 4 [(protoc.gen.jsonschema.manual_link) = "manual-link-2"];
+  EnumOne enum_with_manual = 4 [(protoc.gen.jsonschema.manual_link) = "manual-link-1"];
+  repeated EnumOne enum_with_manual_array = 5 [(protoc.gen.jsonschema.manual_link) = "manual-link-2"];
 
 
   enum NestedEnum {

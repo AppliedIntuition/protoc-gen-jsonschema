@@ -17,6 +17,10 @@ const EnumReference1 = `{
                     "$ref": "#/definitions/samples.MessageWithEnums.NestedEnum",
                     "title": "Nested Enum"
                 },
+                "var": {
+                    "$ref": "#/definitions/samples.MessageWithEnums.DefinedUsedMessage",
+                    "additionalProperties": true
+                },
                 "enum_with_manual": {
                     "$ref": "#/definitions/samples.EnumOne",
                     "options": {
