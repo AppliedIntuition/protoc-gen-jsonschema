@@ -15,6 +15,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/AppliedIntuition/protoc-gen-jsonschema/internal/protos"
 	"github.com/iancoleman/orderedmap"
 )
 
@@ -51,9 +52,9 @@ var customStructGetFieldDocString = reflect.TypeOf((*customSchemaGetFieldDocStri
 // Type represents a JSON Schema object type.
 type Type struct {
 	// RFC draft-wright-json-schema-00
-	Version string `json:"$schema,omitempty"` // section 6.1
-	Ref     string `json:"$ref,omitempty"`    // section 7
-	FullRef     string `json:"$fullRef,omitempty"`    // section 7
+	Version string `json:"$schema,omitempty"`  // section 6.1
+	Ref     string `json:"$ref,omitempty"`     // section 7
+	FullRef string `json:"$fullRef,omitempty"` // custom
 	// RFC draft-wright-json-schema-validation-00, section 5
 	MultipleOf           int                    `json:"multipleOf,omitempty"`           // section 5.1
 	Maximum              int                    `json:"maximum,omitempty"`              // section 5.2
@@ -78,6 +79,7 @@ type Type struct {
 	AdditionalProperties json.RawMessage        `json:"additionalProperties,omitempty"` // section 5.18
 	Dependencies         map[string]*Type       `json:"dependencies,omitempty"`         // section 5.19
 	Enum                 []interface{}          `json:"enum,omitempty"`                 // section 5.20
+	EnumValues           []interface{}          `json:"enumValues,omitempty"`           // custom
 	Type                 string                 `json:"type,omitempty"`                 // section 5.21
 	AllOf                []*Type                `json:"allOf,omitempty"`                // section 5.22
 	AnyOf                []*Type                `json:"anyOf,omitempty"`                // section 5.23
@@ -87,6 +89,8 @@ type Type struct {
 	OptionStrings        []string               `json:"optionStrings,omitempty"`        // custom
 	Options              *Type                  `json:"options,omitempty"`              // custom
 	ManualLink           string                 `json:"manualLink,omitempty"`           // custom
+	IgnoreInAutocomplete bool                   `json:"ignoreInAutocomplete,omitempty"` // custom
+	Units                protos.NumericalUnits  `json:"units,omitempty"`                // custom
 	Not                  *Type                  `json:"not,omitempty"`                  // section 5.25
 	Definitions          Definitions            `json:"definitions,omitempty"`          // section 5.26
 	// RFC draft-wright-json-schema-validation-00, section 6, 7

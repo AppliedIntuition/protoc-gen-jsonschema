@@ -90,12 +90,28 @@ func (c *Converter) convertField(curPkg *ProtoPackage, desc *descriptor.FieldDes
 
 	// Populate options as string.
 	options := desc.GetOptions()
-	if options != nil && proto.HasExtension(options, protos.E_ManualLink) {
-		fieldOptionsValues := proto.GetExtension(options, protos.E_ManualLink)
-		if jsonSchemaType.Options == nil {
-			jsonSchemaType.Options = &jsonschema.Type{}
+	if options != nil {
+		if proto.HasExtension(options, protos.E_ManualLink) {
+			fieldOptionsValues := proto.GetExtension(options, protos.E_ManualLink)
+			if jsonSchemaType.Options == nil {
+				jsonSchemaType.Options = &jsonschema.Type{}
+			}
+			jsonSchemaType.Options.ManualLink = fieldOptionsValues.(string)
 		}
-		jsonSchemaType.Options.ManualLink = fieldOptionsValues.(string)
+		if proto.HasExtension(options, protos.E_IgnoreInAutocomplete) {
+			fieldOptionsValues := proto.GetExtension(options, protos.E_IgnoreInAutocomplete)
+			if jsonSchemaType.Options == nil {
+				jsonSchemaType.Options = &jsonschema.Type{}
+			}
+			jsonSchemaType.Options.IgnoreInAutocomplete = fieldOptionsValues.(bool)
+		}
+		if proto.HasExtension(options, protos.E_Units) {
+			fieldOptionsValues := proto.GetExtension(options, protos.E_Units)
+			if jsonSchemaType.Options == nil {
+				jsonSchemaType.Options = &jsonschema.Type{}
+			}
+			jsonSchemaType.Options.Units = fieldOptionsValues.(protos.NumericalUnits)
+		}
 	}
 
 	// Switch the types, and pick a JSONSchema equivalent:
@@ -217,6 +233,9 @@ func (c *Converter) convertField(curPkg *ProtoPackage, desc *descriptor.FieldDes
 
 	// ENUM:
 	case descriptor.FieldDescriptorProto_TYPE_ENUM:
+		deprecated := jsonSchemaType.Deprecated
+		fieldDescription := jsonSchemaType.Description
+		options := jsonSchemaType.Options
 
 		// Go through all the enums we have, see if we can match any to this field.
 		fullEnumIdentifier := strings.TrimPrefix(desc.GetTypeName(), ".")
@@ -236,7 +255,13 @@ func (c *Converter) convertField(curPkg *ProtoPackage, desc *descriptor.FieldDes
 		}
 
 		jsonSchemaType = &enumSchema
+		jsonSchemaType.Description = fieldDescription
+		jsonSchemaType.Options = options
 		jsonSchemaType.Ref = fmt.Sprintf("%s%s", c.refPrefix, enums[matchedEnum])
+
+		if deprecated {
+			jsonSchemaType.Deprecated = deprecated
+		}
 
 	// Bool:
 	case descriptor.FieldDescriptorProto_TYPE_BOOL:
@@ -288,10 +313,14 @@ func (c *Converter) convertField(curPkg *ProtoPackage, desc *descriptor.FieldDes
 		jsonSchemaType.Items = &jsonschema.Type{}
 
 		if len(jsonSchemaType.Enum) > 0 {
-			jsonSchemaType.Items.Enum = jsonSchemaType.Enum
-			jsonSchemaType.Enum = nil
-			jsonSchemaType.Items.OneOf = nil
+			// Set fields in jsonSchemaType.Items
+			jsonSchemaType.Items.Title = jsonSchemaType.Title
 			jsonSchemaType.Items.Ref = jsonSchemaType.Ref
+
+			// Unset fields in jsonSchemaType
+			jsonSchemaType.Title = ""
+			jsonSchemaType.Enum = nil
+			jsonSchemaType.OneOf = nil
 			jsonSchemaType.Ref = ""
 		} else {
 			jsonSchemaType.Items.Type = jsonSchemaType.Type
@@ -414,6 +443,10 @@ func (c *Converter) convertField(curPkg *ProtoPackage, desc *descriptor.FieldDes
 
 	jsonSchemaType.Required = dedupe(jsonSchemaType.Required)
 
+	if len(jsonSchemaType.Enum) > 0 {
+		jsonSchemaType.Enum = nil
+		jsonSchemaType.OneOf = nil
+	}
 	return jsonSchemaType, nil
 }
 
@@ -444,7 +477,7 @@ func (c *Converter) convertMessageType(curPkg *ProtoPackage, msgDesc *descriptor
 		definitions[name] = refType
 	}
 
-	// Build up a list of JSONSchema type definitions for every message:
+	// Build up a list of JSONSchema type definitions for every enum:
 	for _, name := range enums {
 		fullEnumIdentifier := strings.TrimPrefix(name, ".")
 		matchedEnum, _, _ := c.lookupEnum(curPkg, fullEnumIdentifier)
@@ -463,7 +496,7 @@ func (c *Converter) convertMessageType(curPkg *ProtoPackage, msgDesc *descriptor
 	newJSONSchema := &jsonschema.Schema{
 		Type: &jsonschema.Type{
 			Ref:     fmt.Sprintf("%s%s", c.refPrefix, msgDesc.GetName()),
-			FullRef:     fmt.Sprintf("%s%s.%s", c.refPrefix, pkgName, msgDesc.GetName()),
+			FullRef: fmt.Sprintf("%s%s.%s", c.refPrefix, pkgName, msgDesc.GetName()),
 			Version: c.schemaVersion,
 		},
 		Definitions: definitions,

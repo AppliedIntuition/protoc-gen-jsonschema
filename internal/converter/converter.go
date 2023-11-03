@@ -234,7 +234,9 @@ func (c *Converter) convertEnumType(enum *descriptor.EnumDescriptorProto, conver
 
 		// Add the values to the ENUM:
 		jsonSchemaType.Enum = append(jsonSchemaType.Enum, valueName)
-		if !converterFlags.EnumsAsStringsOnly {
+		if converterFlags.EnumsAsStringsOnly {
+			jsonSchemaType.EnumValues = append(jsonSchemaType.EnumValues, value.Number)
+		} else {
 			jsonSchemaType.Enum = append(jsonSchemaType.Enum, value.Number)
 		}
 	}

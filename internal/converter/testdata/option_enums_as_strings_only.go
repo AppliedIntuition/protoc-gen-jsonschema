@@ -9,6 +9,12 @@ const OptionEnumsAsStringsOnly = `{
         "GBP",
         "EUR"
     ],
+    "enumValues": [
+        0,
+        1,
+        2,
+        3
+    ],
     "type": "string",
     "title": "Currency"
 }`

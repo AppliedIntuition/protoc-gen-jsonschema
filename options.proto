@@ -75,6 +75,109 @@ message EnumOptions {
   bool ignore = 4;
 }
 
+enum NumericalUnits {
+  // Should error if UNKNOWN
+  UNKNOWN = 0;
+  // Number has no units (e.g. ID).
+  NO_UNITS = 1;
+  // ====== DISTANCE METRICS =======
+  // Meters
+  // Display name: "m"
+  M = 2;
+  // Meters / second
+  // Display name: "m/s"
+  MPS = 3;
+  // Meters / second ^ 2
+  // Display name: "m/s^2"
+  MPS2 = 4;
+  // Meters / second ^ 3
+  // Display name: "m/s^3"
+  MPS3 = 14;
+  // Millimeters
+  // Display name: "mm"
+  MM = 15;
+  // Micrometers
+  // Display name: "µm"
+  UM = 16;
+
+  // ==== TIME METRICS ======
+  // Seconds
+  // Dislay name: "s"
+  S = 5;
+
+  // === ANGLE METRICS ===
+  // Radians
+  // Display name: "rad"
+  RAD = 6;
+  // Radians / second
+  // Display name: "rad/s"
+  RADPS = 10;
+  // Radians / second ^ 2
+  // Display name: "rad/s^2"
+  RADPS2 = 11;
+  // Radians / second ^ 3
+  // Display name: "rad/s^3"
+  RADPS3 = 12;
+  // Degrees
+  // Display name: "deg"
+  DEG = 22;
+
+  // == MASS METRICS =========
+  // Grams
+  // Display name: "g"
+  G = 7;
+  // Kilograms
+  // Display name: "kg"
+  KG = 8;
+
+  // === FREQUENCY METRICS ===
+  // Hertz (1 / seconds)
+  // Display name: "Hz"
+  HERTZ = 9;
+  // <!-- TODO(Cynthia): add more here -->
+
+  // ==== SIZE METRICS =====
+  // Pixels
+  // Display name: "px"
+  PIXELS = 17;
+
+  // ==== POWER METRICS =====
+  // Decibel Milliwatts
+  // Display name: "dBm"
+  DBM = 18;
+  // Decibels / Meter ^ 2
+  // Display name: "dBsm"
+  DBSM = 19;
+  // Decibel Watts
+  // Display name: "dBW"
+  DBW = 20;
+  // Decibels
+  // Display name: "dB"
+  DB = 21;
+
+  // ==== INERTIA METRICS ====
+  // Kilogram * Meter ^ 2
+  // Display name: "kg*m^2"
+  KGM2 = 23;
+
+  // ==== FORCE METRICS =====
+  // Newtons / Meter
+  // Display name: "N/m"
+  NPM = 24;
+  // Newton Seconds / Meter
+  // Display name: "N*s/m"
+  NSPM = 25;
+  // Newtons
+  // Display name: "N"
+  N = 26;
+  // Newton Meters
+  // Display name: "Nm"
+  NM = 27;
+  // Newtons Meters / Second
+  // Display name: "Nm/s"
+  NMPS = 28;
+}
+
 
 extend google.protobuf.FieldOptions {
   FieldOptions field_options = 1125;
@@ -82,6 +185,8 @@ extend google.protobuf.FieldOptions {
   // Custom Options
 
   string manual_link = 50015;
+  bool ignore_in_autocomplete = 50000;
+  NumericalUnits units = 50010;
 }
 
 extend google.protobuf.FileOptions {

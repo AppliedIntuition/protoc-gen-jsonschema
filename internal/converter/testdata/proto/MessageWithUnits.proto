@@ -1,0 +1,9 @@
+syntax = "proto3";
+package samples;
+
+import "options.proto";
+
+
+message MessageWithUnits {
+    int32 height = 1 [(protoc.gen.jsonschema.units) = M];
+}

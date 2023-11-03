@@ -9,47 +9,30 @@ const EnumReference1 = `{
             "properties": {
                 "enumFieldOne": {
                     "$ref": "#/definitions/samples.EnumOne",
-                    "enum": [
-                        "Foo",
-                        0,
-                        "Bar",
-                        1,
-                        "Baz",
-                        2
-                    ],
-                    "oneOf": [
-                        {
-                            "type": "string"
-                        },
-                        {
-                            "type": "integer"
-                        }
-                    ],
-                    "title": "Enum One"
+                    "deprecated": true,
+                    "title": "Enum One",
+                    "description": "Comment about EnumOne."
                 },
                 "enumFieldTwo": {
                     "$ref": "#/definitions/samples.MessageWithEnums.NestedEnum",
-                    "enum": [
-                        "Foo",
-                        0,
-                        "Bar",
-                        1,
-                        "Baz",
-                        2
-                    ],
-                    "oneOf": [
-                        {
-                            "type": "string"
-                        },
-                        {
-                            "type": "integer"
-                        }
-                    ],
                     "title": "Nested Enum"
                 },
-                "var": {
-                    "$ref": "#/definitions/samples.MessageWithEnums.DefinedUsedMessage",
-                    "additionalProperties": true
+                "enum_with_manual": {
+                    "$ref": "#/definitions/samples.EnumOne",
+                    "options": {
+                        "manualLink": "manual-link-1"
+                    },
+                    "title": "Enum One"
+                },
+                "enum_with_manual_array": {
+                    "items": {
+                        "$ref": "#/definitions/samples.EnumOne",
+                        "title": "Enum One"
+                    },
+                    "type": "array",
+                    "options": {
+                        "manualLink": "manual-link-2"
+                    }
                 }
             },
             "additionalProperties": true,

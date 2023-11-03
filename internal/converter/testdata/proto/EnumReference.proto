@@ -1,6 +1,8 @@
 syntax = "proto3";
 package samples;
 
+import "options.proto";
+
 enum EnumOne {
     Foo = 0;
     Bar = 1;
@@ -8,9 +10,14 @@ enum EnumOne {
 }
 
 message MessageWithEnums {
-  EnumOne enumFieldOne = 1;
+  // Comment about EnumOne.
+  EnumOne enumFieldOne = 1 [deprecated = true];
   NestedEnum enumFieldTwo = 2;
   DefinedUsedMessage var = 3;
+
+  EnumOne enum_with_manual = 3 [(protoc.gen.jsonschema.manual_link) = "manual-link-1"];
+  repeated EnumOne enum_with_manual_array = 4 [(protoc.gen.jsonschema.manual_link) = "manual-link-2"];
+
 
   enum NestedEnum {
     Foo = 0;
