@@ -320,6 +320,7 @@ func (c *Converter) convertField(curPkg *ProtoPackage, desc *descriptor.FieldDes
 			// Unset fields in jsonSchemaType
 			jsonSchemaType.Title = ""
 			jsonSchemaType.Enum = nil
+			jsonSchemaType.EnumValues = nil
 			jsonSchemaType.OneOf = nil
 			jsonSchemaType.Ref = ""
 		} else {
@@ -445,6 +446,7 @@ func (c *Converter) convertField(curPkg *ProtoPackage, desc *descriptor.FieldDes
 
 	if len(jsonSchemaType.Enum) > 0 {
 		jsonSchemaType.Enum = nil
+		jsonSchemaType.EnumValues = nil
 		jsonSchemaType.OneOf = nil
 	}
 	return jsonSchemaType, nil
@@ -551,7 +553,7 @@ func (c *Converter) recursiveFindNestedMessages(curPkg *ProtoPackage, msgDesc *d
 
 	for _, desc := range msgDesc.GetNestedType() {
 		newTypeName := c.getUpdatedTypeName(curPkg, typeName, desc.GetName())
-		
+
 		if err := c.recursiveFindNestedMessages(curPkg, desc, newTypeName, nestedMessages); err != nil {
 			return err
 		}
@@ -604,6 +606,14 @@ func (c *Converter) recursiveFindNestedEnums(curPkg *ProtoPackage, msgDesc *desc
 				return fmt.Errorf("no such message type named %s", typeName)
 			}
 			nestedEnums[recordType] = typeName
+		}
+	}
+
+	for _, desc := range msgDesc.GetNestedType() {
+		newTypeName := c.getUpdatedTypeName(curPkg, typeName, desc.GetName())
+
+		if err := c.recursiveFindNestedEnums(curPkg, desc, newTypeName, nestedEnums, searchedMsgs); err != nil {
+			return err
 		}
 	}
 
@@ -836,7 +846,6 @@ func dedupe(inputStrings []string) []string {
 	}
 	return outputStrings
 }
-
 
 func (c *Converter) getUpdatedTypeName(curPkg *ProtoPackage, typeName string, descName string) string {
 	if !strings.Contains(typeName, ".") {
