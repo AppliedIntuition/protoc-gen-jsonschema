@@ -534,6 +534,7 @@ func (c *Converter) recursiveFindNestedMessages(curPkg *ProtoPackage, msgDesc *d
 	}
 	nestedMessages[msgDesc] = typeName
 
+	// Recursively search all fields whose type is a message.
 	for _, desc := range msgDesc.GetField() {
 		descType := desc.GetType()
 		if descType != descriptor.FieldDescriptorProto_TYPE_MESSAGE && descType != descriptor.FieldDescriptorProto_TYPE_GROUP {
@@ -551,6 +552,7 @@ func (c *Converter) recursiveFindNestedMessages(curPkg *ProtoPackage, msgDesc *d
 		}
 	}
 
+	// Recursively search all messages defined (but not used) within this one.
 	for _, desc := range msgDesc.GetNestedType() {
 		newTypeName := c.getUpdatedTypeName(curPkg, typeName, desc.GetName())
 
@@ -592,6 +594,7 @@ func (c *Converter) recursiveFindNestedEnums(curPkg *ProtoPackage, msgDesc *desc
 		descType := desc.GetType()
 		typeName := desc.GetTypeName()
 
+		// Recursively search all fields whose type is a message.
 		if descType == descriptor.FieldDescriptorProto_TYPE_MESSAGE || descType == descriptor.FieldDescriptorProto_TYPE_GROUP {
 			recordType, _, ok := c.lookupType(curPkg, typeName)
 			if !ok {
@@ -600,6 +603,8 @@ func (c *Converter) recursiveFindNestedEnums(curPkg *ProtoPackage, msgDesc *desc
 			if err := c.recursiveFindNestedEnums(curPkg, recordType, typeName, nestedEnums, searchedMsgs); err != nil {
 				return err
 			}
+
+			// Save all fields whose type is an enum.
 		} else if descType == descriptor.FieldDescriptorProto_TYPE_ENUM {
 			recordType, _, ok := c.lookupEnum(curPkg, typeName)
 			if !ok {
@@ -609,6 +614,7 @@ func (c *Converter) recursiveFindNestedEnums(curPkg *ProtoPackage, msgDesc *desc
 		}
 	}
 
+	// Recursively search all messages defined (but not used) within this message.
 	for _, desc := range msgDesc.GetNestedType() {
 		newTypeName := c.getUpdatedTypeName(curPkg, typeName, desc.GetName())
 
@@ -617,6 +623,7 @@ func (c *Converter) recursiveFindNestedEnums(curPkg *ProtoPackage, msgDesc *desc
 		}
 	}
 
+	// Save all enums that are defined (but not used) within this message.
 	for _, desc := range msgDesc.GetEnumType() {
 		nestedEnums[desc] = c.getUpdatedTypeName(curPkg, typeName, desc.GetName())
 	}
