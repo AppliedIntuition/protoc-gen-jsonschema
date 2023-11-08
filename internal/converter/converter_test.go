@@ -212,14 +212,14 @@ func configureSampleProtos() map[string]sampleProto {
 			ProtoFileName:      "EnumReference.proto",
 		},
 		"EnumUnused": {
-			ExpectedJSONSchema:    []string{testdata.MessageUnusedEnum},
-			FilesToGenerate:       []string{"EnumUnused.proto"},
-			ProtoFileName:         "EnumUnused.proto",
+			ExpectedJSONSchema: []string{testdata.MessageUnusedEnum},
+			FilesToGenerate:    []string{"EnumUnused.proto"},
+			ProtoFileName:      "EnumUnused.proto",
 		},
 		"MessageUnused": {
-			ExpectedJSONSchema:    []string{testdata.MessageUnusedMessage},
-			FilesToGenerate:       []string{"MessageUnused.proto"},
-			ProtoFileName:         "MessageUnused.proto",
+			ExpectedJSONSchema: []string{testdata.MessageUnusedMessage},
+			FilesToGenerate:    []string{"MessageUnused.proto"},
+			ProtoFileName:      "MessageUnused.proto",
 		},
 		"EnumWithMessage": {
 			ExpectedJSONSchema:    []string{testdata.EnumWithMessageEnum, testdata.EnumWithMessage},
@@ -282,6 +282,11 @@ func configureSampleProtos() map[string]sampleProto {
 			ProtoFileName:         "NestedObject.proto",
 			ObjectsToValidateFail: []string{testdata.NestedObjectFail},
 			ObjectsToValidatePass: []string{testdata.NestedObjectPass},
+		},
+		"NestedUnreferencedEnum": {
+			ExpectedJSONSchema: []string{testdata.NestedUnreferencedEnum},
+			FilesToGenerate:    []string{"NestedUnreferencedEnum.proto"},
+			ProtoFileName:      "NestedUnreferencedEnum.proto",
 		},
 		"NoPackage": {
 			ExpectedJSONSchema: []string{},

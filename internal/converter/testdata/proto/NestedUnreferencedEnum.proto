@@ -1,0 +1,30 @@
+syntax = "proto3";
+package samples;
+import "options.proto";
+
+// A set of predefined gear ratios and torque maps.
+message Outfit {
+  message Shirt {
+    enum ShirtType {
+      option (protoc.gen.jsonschema.enum_options).enums_as_strings_only = true;
+      T_SHIRT = 0;
+      LONG_SLEEVE = 1;
+      NO_SHIRT = 2;
+    }
+    oneof shirt {
+      // When shirt_type is unset, no shirt is selected.
+      ShirtType shirt_type = 1;
+    }
+  }
+  message Pants {
+    enum PantsType {
+      option (protoc.gen.jsonschema.enum_options).enums_as_strings_only = true;
+      SHORTS = 0;
+      LONG_PANTS = 1;
+    }
+    oneof pants {
+      // When pants_type is unset, no pants are selected. Not recommended.
+      PantsType pants_type = 1;
+    }
+  }
+}
