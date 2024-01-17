@@ -33,6 +33,19 @@ var (
 	}
 )
 
+// Expected google.protobuf.Value type
+// (this is not 1:1 with protobuf types - for example, doubles and ints
+// are both represented by number_value)
+type ValueType int
+
+const (
+	unset			ValueType = iota
+	number_value
+	string_value
+	bool_value
+)
+
+
 func (c *Converter) registerEnum(pkgName string, enum *descriptor.EnumDescriptorProto) {
 	pkg := globalPkg
 	if pkgName != "" {
@@ -114,11 +127,14 @@ func (c *Converter) convertField(curPkg *ProtoPackage, desc *descriptor.FieldDes
 		}
 	}
 
+	var expectedValueType := unset
+
 	// Switch the types, and pick a JSONSchema equivalent:
 	switch desc.GetType() {
 
 	// Float32:
 	case descriptor.FieldDescriptorProto_TYPE_DOUBLE,
+		expectedValueType = number_value
 		descriptor.FieldDescriptorProto_TYPE_FLOAT:
 		if messageFlags.AllowNullValues {
 			jsonSchemaType.OneOf = []*jsonschema.Type{
@@ -131,6 +147,7 @@ func (c *Converter) convertField(curPkg *ProtoPackage, desc *descriptor.FieldDes
 
 	// Int32:
 	case descriptor.FieldDescriptorProto_TYPE_INT32,
+		expectedValueType = number_value
 		descriptor.FieldDescriptorProto_TYPE_UINT32,
 		descriptor.FieldDescriptorProto_TYPE_FIXED32,
 		descriptor.FieldDescriptorProto_TYPE_SFIXED32,
@@ -146,6 +163,7 @@ func (c *Converter) convertField(curPkg *ProtoPackage, desc *descriptor.FieldDes
 
 	// Int64:
 	case descriptor.FieldDescriptorProto_TYPE_INT64,
+		expectedValueType = number_value
 		descriptor.FieldDescriptorProto_TYPE_UINT64,
 		descriptor.FieldDescriptorProto_TYPE_FIXED64,
 		descriptor.FieldDescriptorProto_TYPE_SFIXED64,
@@ -177,6 +195,7 @@ func (c *Converter) convertField(curPkg *ProtoPackage, desc *descriptor.FieldDes
 
 	// String:
 	case descriptor.FieldDescriptorProto_TYPE_STRING:
+		expectedValueType = string_value
 		stringDef := &jsonschema.Type{Type: gojsonschema.TYPE_STRING}
 		// Check for custom options
 		opts := desc.GetOptions()
@@ -265,6 +284,7 @@ func (c *Converter) convertField(curPkg *ProtoPackage, desc *descriptor.FieldDes
 
 	// Bool:
 	case descriptor.FieldDescriptorProto_TYPE_BOOL:
+		expectedValueType = bool_value
 		if messageFlags.AllowNullValues {
 			jsonSchemaType.OneOf = []*jsonschema.Type{
 				{Type: gojsonschema.TYPE_NULL},
