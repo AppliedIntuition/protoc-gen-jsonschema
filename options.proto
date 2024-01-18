@@ -5,6 +5,7 @@
 syntax = "proto3";
 package protoc.gen.jsonschema;
 import "google/protobuf/descriptor.proto";
+import "google/protobuf/struct.proto";
 option go_package = "./protos";
 
 
@@ -187,6 +188,9 @@ extend google.protobuf.FieldOptions {
   string manual_link = 50015;
   bool ignore_in_autocomplete = 50000;
   NumericalUnits units = 50010;
+
+  // Custom default value of a field
+  google.protobuf.Value default_value = 50019;
 }
 
 extend google.protobuf.FileOptions {

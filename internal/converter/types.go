@@ -12,6 +12,8 @@ import (
 
 	"github.com/AppliedIntuition/protoc-gen-jsonschema/internal/converter/jsonschema"
 	"github.com/AppliedIntuition/protoc-gen-jsonschema/internal/protos"
+
+	"github.com/golang/protobuf/ptypes/struct"
 )
 
 var (
@@ -127,15 +129,16 @@ func (c *Converter) convertField(curPkg *ProtoPackage, desc *descriptor.FieldDes
 		}
 	}
 
-	var expectedValueType := unset
+	expectedValueType := unset
 
 	// Switch the types, and pick a JSONSchema equivalent:
 	switch desc.GetType() {
 
 	// Float32:
 	case descriptor.FieldDescriptorProto_TYPE_DOUBLE,
-		expectedValueType = number_value
 		descriptor.FieldDescriptorProto_TYPE_FLOAT:
+		
+		expectedValueType = number_value
 		if messageFlags.AllowNullValues {
 			jsonSchemaType.OneOf = []*jsonschema.Type{
 				{Type: gojsonschema.TYPE_NULL},
@@ -147,11 +150,12 @@ func (c *Converter) convertField(curPkg *ProtoPackage, desc *descriptor.FieldDes
 
 	// Int32:
 	case descriptor.FieldDescriptorProto_TYPE_INT32,
-		expectedValueType = number_value
 		descriptor.FieldDescriptorProto_TYPE_UINT32,
 		descriptor.FieldDescriptorProto_TYPE_FIXED32,
 		descriptor.FieldDescriptorProto_TYPE_SFIXED32,
 		descriptor.FieldDescriptorProto_TYPE_SINT32:
+		
+		expectedValueType = number_value
 		if messageFlags.AllowNullValues {
 			jsonSchemaType.OneOf = []*jsonschema.Type{
 				{Type: gojsonschema.TYPE_NULL},
@@ -163,11 +167,12 @@ func (c *Converter) convertField(curPkg *ProtoPackage, desc *descriptor.FieldDes
 
 	// Int64:
 	case descriptor.FieldDescriptorProto_TYPE_INT64,
-		expectedValueType = number_value
 		descriptor.FieldDescriptorProto_TYPE_UINT64,
 		descriptor.FieldDescriptorProto_TYPE_FIXED64,
 		descriptor.FieldDescriptorProto_TYPE_SFIXED64,
 		descriptor.FieldDescriptorProto_TYPE_SINT64:
+		
+		expectedValueType = number_value
 
 		// As integer:
 		if c.Flags.DisallowBigIntsAsStrings {
@@ -468,6 +473,28 @@ func (c *Converter) convertField(curPkg *ProtoPackage, desc *descriptor.FieldDes
 		jsonSchemaType.Enum = nil
 		jsonSchemaType.EnumValues = nil
 		jsonSchemaType.OneOf = nil
+	}
+	
+	if options != nil {
+		if proto.HasExtension(options, protos.E_DefaultValue) {
+			var defaultValue interface{}
+
+			defaultValueObj := proto.GetExtension(options, protos.E_DefaultValue).(*structpb.Value)
+			if defaultValueObj.GetStringValue() != "" && expectedValueType == string_value {
+				defaultValue = defaultValueObj.GetStringValue()
+			} else if defaultValueObj.GetBoolValue() != false && expectedValueType == bool_value {
+				defaultValue = defaultValueObj.GetBoolValue()
+			} else if defaultValueObj.GetNumberValue() != 0 && expectedValueType == number_value {
+				defaultValue = defaultValueObj.GetNumberValue()
+			} else {
+				return nil, fmt.Errorf("Type of default value is incompatible with type of field.")
+			}
+			
+			if jsonSchemaType.Options == nil {
+				jsonSchemaType.Options = &jsonschema.Type{}
+			}
+			jsonSchemaType.Options.DefaultValue = defaultValue
+		}
 	}
 	return jsonSchemaType, nil
 }
