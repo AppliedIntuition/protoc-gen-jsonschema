@@ -316,6 +316,11 @@ func configureSampleProtos() map[string]sampleProto {
 			ObjectsToValidateFail: []string{testdata.OptionAllowNullValuesFail},
 			ObjectsToValidatePass: []string{testdata.OptionAllowNullValuesPass},
 		},
+		"OptionDefaultValue": {
+			ExpectedJSONSchema:    []string{testdata.OptionDefaultValue},
+			FilesToGenerate:       []string{"OptionDefaultValue.proto"},
+			ProtoFileName:         "OptionDefaultValue.proto",
+		},
 		"OptionDisallowAdditionalProperties": {
 			ExpectedJSONSchema:    []string{testdata.OptionDisallowAdditionalProperties},
 			FilesToGenerate:       []string{"OptionDisallowAdditionalProperties.proto"},
