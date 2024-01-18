@@ -40,6 +40,7 @@ var (
 // are both represented by number_value)
 type ValueType int
 
+// Currently only support overrides for numbers, strings and booleans.
 const (
 	unset			ValueType = iota
 	number_value
@@ -129,6 +130,7 @@ func (c *Converter) convertField(curPkg *ProtoPackage, desc *descriptor.FieldDes
 		}
 	}
 
+	// Initialize expectedValueType to unset
 	expectedValueType := unset
 
 	// Switch the types, and pick a JSONSchema equivalent:
@@ -333,6 +335,33 @@ func (c *Converter) convertField(curPkg *ProtoPackage, desc *descriptor.FieldDes
 		return nil, fmt.Errorf("unrecognized field type: %s", desc.GetType().String())
 	}
 
+	// Read default_value field option if it exists
+	// and validate that the type matches the field type.
+	if options != nil {
+		if proto.HasExtension(options, protos.E_DefaultValue) {
+			var defaultValue interface{}
+
+			defaultValueObj := proto.GetExtension(options, protos.E_DefaultValue).(*structpb.Value)
+			if defaultValueObj.GetStringValue() != "" && expectedValueType == string_value {
+				defaultValue = defaultValueObj.GetStringValue()
+
+			} else if defaultValueObj.GetBoolValue() != false && expectedValueType == bool_value {
+				defaultValue = defaultValueObj.GetBoolValue()
+
+			} else if defaultValueObj.GetNumberValue() != 0 && expectedValueType == number_value {
+				defaultValue = defaultValueObj.GetNumberValue()
+
+			} else {
+				return nil, fmt.Errorf("Type of default value is incompatible with type of field.")
+			}
+			
+			if jsonSchemaType.Options == nil {
+				jsonSchemaType.Options = &jsonschema.Type{}
+			}
+			jsonSchemaType.Options.DefaultValue = defaultValue
+		}
+	}
+
 	// Recurse array of primitive types:
 	if desc.GetLabel() == descriptor.FieldDescriptorProto_LABEL_REPEATED && jsonSchemaType.Type != gojsonschema.TYPE_OBJECT {
 		jsonSchemaType.Items = &jsonschema.Type{}
@@ -473,28 +502,6 @@ func (c *Converter) convertField(curPkg *ProtoPackage, desc *descriptor.FieldDes
 		jsonSchemaType.Enum = nil
 		jsonSchemaType.EnumValues = nil
 		jsonSchemaType.OneOf = nil
-	}
-	
-	if options != nil {
-		if proto.HasExtension(options, protos.E_DefaultValue) {
-			var defaultValue interface{}
-
-			defaultValueObj := proto.GetExtension(options, protos.E_DefaultValue).(*structpb.Value)
-			if defaultValueObj.GetStringValue() != "" && expectedValueType == string_value {
-				defaultValue = defaultValueObj.GetStringValue()
-			} else if defaultValueObj.GetBoolValue() != false && expectedValueType == bool_value {
-				defaultValue = defaultValueObj.GetBoolValue()
-			} else if defaultValueObj.GetNumberValue() != 0 && expectedValueType == number_value {
-				defaultValue = defaultValueObj.GetNumberValue()
-			} else {
-				return nil, fmt.Errorf("Type of default value is incompatible with type of field.")
-			}
-			
-			if jsonSchemaType.Options == nil {
-				jsonSchemaType.Options = &jsonschema.Type{}
-			}
-			jsonSchemaType.Options.DefaultValue = defaultValue
-		}
 	}
 	return jsonSchemaType, nil
 }

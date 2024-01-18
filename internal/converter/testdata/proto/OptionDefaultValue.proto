@@ -4,5 +4,7 @@ import "options.proto";
 
 message OptionDefaultValue {
     string field_one = 1 [(protoc.gen.jsonschema.default_value).string_value = "sample_str"];
-    bool field_two = 2 [(protoc.gen.jsonschema.default_value).bool_value = true];
+    repeated bool field_two = 2 [(protoc.gen.jsonschema.default_value).bool_value = true];
+    int32 field_three = 3 [(protoc.gen.jsonschema.default_value).number_value = 7];
+    int32 field_four = 4;
 }

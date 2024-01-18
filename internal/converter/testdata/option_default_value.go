@@ -14,10 +14,22 @@ const OptionDefaultValue = `{
                     }
                 },
                 "field_two": {
-                    "type": "boolean",
+                    "items": {
+                        "type": "boolean"
+                    },
+                    "type": "array",
                     "options": {
                         "DefaultValue": true
                     }
+                },
+                "field_three": {
+                    "type": "integer",
+                    "options": {
+                        "DefaultValue": 7
+                    }
+                },
+                "field_four": {
+                    "type": "integer"
                 }
             },
             "additionalProperties": true,
