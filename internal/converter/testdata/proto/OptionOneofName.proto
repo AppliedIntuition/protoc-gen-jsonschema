@@ -1,0 +1,8 @@
+syntax = "proto3";
+package samples;
+import "options.proto";
+
+message OptionOneofName {
+    repeated string foo = 1 [(protoc.gen.jsonschema.legacy_only_oneof_name) = "oneof_field"];
+    repeated string bar = 2 [(protoc.gen.jsonschema.legacy_only_oneof_name) = "oneof_field"];
+}

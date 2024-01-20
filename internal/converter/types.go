@@ -112,6 +112,13 @@ func (c *Converter) convertField(curPkg *ProtoPackage, desc *descriptor.FieldDes
 			}
 			jsonSchemaType.Options.Units = fieldOptionsValues.(protos.NumericalUnits)
 		}
+		if proto.HasExtension(options, protos.E_LegacyOnlyOneofName) {
+			OneofName := proto.GetExtension(options, protos.E_LegacyOnlyOneofName)
+			if jsonSchemaType.Options == nil {
+				jsonSchemaType.Options = &jsonschema.Type{}
+			}
+			jsonSchemaType.Options.OneofName = OneofName.(string)
+		}
 	}
 
 	// Switch the types, and pick a JSONSchema equivalent:
