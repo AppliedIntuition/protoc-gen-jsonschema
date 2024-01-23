@@ -187,6 +187,7 @@ extend google.protobuf.FieldOptions {
   string manual_link = 50015;
   bool ignore_in_autocomplete = 50000;
   NumericalUnits units = 50010;
+  string legacy_only_oneof_name = 50020;
 }
 
 extend google.protobuf.FileOptions {

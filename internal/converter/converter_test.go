@@ -378,6 +378,11 @@ func configureSampleProtos() map[string]sampleProto {
 			FilesToGenerate:    []string{"OptionIgnoredMessage.proto"},
 			ProtoFileName:      "OptionIgnoredMessage.proto",
 		},
+		"OptionOneofName": {
+			ExpectedJSONSchema: []string{testdata.OptionOneofName},
+			FilesToGenerate:    []string{"OptionOneofName.proto"},
+			ProtoFileName:      "OptionOneofName.proto",
+		},
 		"OptionRequiredField": {
 			ExpectedJSONSchema:    []string{testdata.OptionRequiredField},
 			FilesToGenerate:       []string{"OptionRequiredField.proto"},
