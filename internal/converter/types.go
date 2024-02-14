@@ -705,6 +705,7 @@ func (c *Converter) recursiveConvertMessageType(curPkg *ProtoPackage, msgDesc *d
 				{Type: gojsonschema.TYPE_OBJECT},
 				{Type: gojsonschema.TYPE_STRING},
 			}
+			jsonSchemaType.Format = "value"
 		case "Duration":
 			jsonSchemaType.Type = gojsonschema.TYPE_STRING
 		case "Empty":
