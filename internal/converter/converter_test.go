@@ -468,7 +468,7 @@ func configureSampleProtos() map[string]sampleProto {
 			ObjectsToValidatePass: []string{testdata.SelfReferencePass},
 		},
 		"SeveralEnums": {
-			ExpectedJSONSchema:    []string{testdata.FirstEnum, testdata.SecondEnum},
+			ExpectedJSONSchema:    []string{testdata.FirstEnum, testdata.SecondEnum, testdata.EnumWithComments},
 			FilesToGenerate:       []string{"SeveralEnums.proto"},
 			ProtoFileName:         "SeveralEnums.proto",
 			ObjectsToValidateFail: []string{testdata.FirstEnumFail, testdata.SecondEnumFail},
