@@ -92,6 +92,7 @@ type Type struct {
 	IgnoreInAutocomplete bool                   `json:"ignoreInAutocomplete,omitempty"` // custom
 	Units                protos.NumericalUnits  `json:"units,omitempty"`                // custom
 	OneofName            string                 `json:"oneofName,omitempty"`            // custom
+	WellKnownType        string                 `json:"wellKnownTypes,omitempty"`       // custom
 	Not                  *Type                  `json:"not,omitempty"`                  // section 5.25
 	Definitions          Definitions            `json:"definitions,omitempty"`          // section 5.26
 	// RFC draft-wright-json-schema-validation-00, section 6, 7
