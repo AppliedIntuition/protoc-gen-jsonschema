@@ -705,14 +705,16 @@ func (c *Converter) recursiveConvertMessageType(curPkg *ProtoPackage, msgDesc *d
 				{Type: gojsonschema.TYPE_OBJECT},
 				{Type: gojsonschema.TYPE_STRING},
 			}
+			jsonSchemaType.WellKnownType = "Value"
 		case "Duration":
 			jsonSchemaType.Type = gojsonschema.TYPE_STRING
+			jsonSchemaType.WellKnownType = "Duration"
 		case "Empty":
 			jsonSchemaType.Type = gojsonschema.TYPE_OBJECT
-			jsonSchemaType.Format = "empty"
+			jsonSchemaType.WellKnownType = "Empty"
 		case "Struct":
 			jsonSchemaType.Type = gojsonschema.TYPE_OBJECT
-			jsonSchemaType.Format = "struct"
+			jsonSchemaType.WellKnownType = "Struct"
 		}
 
 		// If we're allowing nulls then prepare a OneOf:

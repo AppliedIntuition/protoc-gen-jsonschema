@@ -25,8 +25,41 @@ const GoogleValue = `{
                             "type": "string"
                         }
                     ],
+                    "wellKnownTypes": "Value",
                     "title": "Value",
                     "description": "` + "`Value`" + ` represents a dynamically typed value which can be either null, a number, a string, a boolean, a recursive struct value, or a list of values. A producer of value is expected to set one of these variants. Absence of any variant indicates an error. The JSON representation for ` + "`Value`" + ` is JSON value."
+                },
+                "args": {
+                    "properties": {
+                        "values": {
+                            "items": {
+                                "oneOf": [
+                                    {
+                                        "type": "array"
+                                    },
+                                    {
+                                        "type": "boolean"
+                                    },
+                                    {
+                                        "type": "number"
+                                    },
+                                    {
+                                        "type": "object"
+                                    },
+                                    {
+                                        "type": "string"
+                                    }
+                                ],
+                                "wellKnownTypes": "Value",
+                                "title": "Value",
+                                "description": "` + "`Value`" + ` represents a dynamically typed value which can be either null, a number, a string, a boolean, a recursive struct value, or a list of values. A producer of value is expected to set one of these variants. Absence of any variant indicates an error. The JSON representation for ` + "`Value`" + ` is JSON value."
+                            },
+                            "type": "array",
+                            "description": "Repeated field of dynamically typed values."
+                        }
+                    },
+                    "additionalProperties": true,
+                    "type": "object"
                 }
             },
             "additionalProperties": true,
