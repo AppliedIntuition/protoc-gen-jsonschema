@@ -268,7 +268,7 @@ func (c *Converter) convertFile(file *descriptor.FileDescriptorProto, fileExtens
 	// Generate standalone ENUMs:
 	for _, enum := range file.GetEnumType() {
 		jsonSchemaFileName := c.generateSchemaFilename(file, fileExtension, enum.GetName())
-		c.logger.WithField("proto_filename", protoFileName).WithField("enum_name", enum.GetName()).WithField("jsonschema_filename", jsonSchemaFileName).Info("Generating JSON-schema for stand-alone ENUM")
+		c.logger.WithField("proto_filename", protoFileName).WithField("enum_name", enum.GetName()).WithField("jsonschema_filename", jsonSchemaFileName).Debug("Generating JSON-schema for stand-alone ENUM")
 
 		// Convert the ENUM:
 		enumJSONSchema, err := c.convertEnumType(enum, ConverterFlags{})
@@ -338,7 +338,7 @@ func (c *Converter) convertFile(file *descriptor.FileDescriptorProto, fileExtens
 
 			// Generate a schema filename:
 			jsonSchemaFileName := c.generateSchemaFilename(file, fileExtension, msgDesc.GetName())
-			c.logger.WithField("proto_filename", protoFileName).WithField("msg_name", msgDesc.GetName()).WithField("jsonschema_filename", jsonSchemaFileName).Info("Generating JSON-schema for MESSAGE")
+			c.logger.WithField("proto_filename", protoFileName).WithField("msg_name", msgDesc.GetName()).WithField("jsonschema_filename", jsonSchemaFileName).Debug("Generating JSON-schema for MESSAGE")
 
 			// Marshal the JSON-Schema into JSON:
 			jsonSchemaJSON, err := json.MarshalIndent(messageJSONSchema, "", "    ")
