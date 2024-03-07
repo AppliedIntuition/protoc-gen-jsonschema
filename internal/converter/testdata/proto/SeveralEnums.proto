@@ -14,3 +14,17 @@ enum SecondEnum {
     VALUE_6 = 2;
     VALUE_7 = 3;
 }
+
+
+// This enum contains a lot of information.
+enum EnumWithComments {
+    // This description discusses value number 1.
+    // Not much to say about value 1.
+    VAL1 = 0;
+    // Value 2 comes after value1. It's not as important.
+    VAL2 = 1;
+    // Value 3 is the most important.
+    // Here is a multiline description about the third value.
+    // Done talking about value 3 now.
+    VAL3 = 2;
+}
