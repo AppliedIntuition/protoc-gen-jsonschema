@@ -41,7 +41,7 @@ const ArrayOfPrimitives = `{
                     "items": {
                         "oneOf": [
                             {
-                                "type": "integer",
+                                "type": "string",
                                 "format": "int64"
                             },
                             {
@@ -81,7 +81,7 @@ const ArrayOfPrimitives = `{
                 "big_number": {
                     "oneOf": [
                         {
-                            "type": "integer",
+                            "type": "string",
                             "format": "int64"
                         },
                         {
@@ -149,7 +149,7 @@ const ArrayOfPrimitivesDouble = `{
                     "items": {
                         "oneOf": [
                             {
-                                "type": "integer",
+                                "type": "string",
                                 "format": "int64"
                             },
                             {
@@ -189,7 +189,7 @@ const ArrayOfPrimitivesDouble = `{
                 "big_number": {
                     "oneOf": [
                         {
-                            "type": "integer",
+                            "type": "string",
                             "format": "int64"
                         },
                         {
@@ -200,7 +200,7 @@ const ArrayOfPrimitivesDouble = `{
                 "bigNumber": {
                     "oneOf": [
                         {
-                            "type": "integer",
+                            "type": "string",
                             "format": "int64"
                         },
                         {

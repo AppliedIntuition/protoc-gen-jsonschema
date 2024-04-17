@@ -26,7 +26,7 @@ const JSONFields = `{
                     "type": "boolean"
                 },
                 "snakeNumb": {
-                    "type": "integer",
+                    "type": "string",
                     "format": "int64"
                 },
                 "otherNumb": {
