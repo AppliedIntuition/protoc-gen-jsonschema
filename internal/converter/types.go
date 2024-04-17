@@ -158,28 +158,14 @@ func (c *Converter) convertField(curPkg *ProtoPackage, desc *descriptor.FieldDes
 		descriptor.FieldDescriptorProto_TYPE_SFIXED64,
 		descriptor.FieldDescriptorProto_TYPE_SINT64:
 
-		// As integer:
-		if c.Flags.DisallowBigIntsAsStrings {
-			if messageFlags.AllowNullValues {
-				jsonSchemaType.OneOf = []*jsonschema.Type{
-					{Type: gojsonschema.TYPE_INTEGER},
-					{Type: gojsonschema.TYPE_NULL},
-				}
-			} else {
-				jsonSchemaType.Type = gojsonschema.TYPE_INTEGER
+		if messageFlags.AllowNullValues {
+			jsonSchemaType.OneOf = []*jsonschema.Type{
+				{Type: gojsonschema.TYPE_INTEGER, Format: "int64"},
+				{Type: gojsonschema.TYPE_NULL},
 			}
-		}
-
-		// As string:
-		if !c.Flags.DisallowBigIntsAsStrings {
-			if messageFlags.AllowNullValues {
-				jsonSchemaType.OneOf = []*jsonschema.Type{
-					{Type: gojsonschema.TYPE_STRING},
-					{Type: gojsonschema.TYPE_NULL},
-				}
-			} else {
-				jsonSchemaType.Type = gojsonschema.TYPE_STRING
-			}
+		} else {
+			jsonSchemaType.Type = gojsonschema.TYPE_INTEGER
+			jsonSchemaType.Format = "int64"
 		}
 
 	// String:
@@ -348,7 +334,7 @@ func (c *Converter) convertField(curPkg *ProtoPackage, desc *descriptor.FieldDes
 	}
 
 	// Recurse nested objects / arrays of objects (if necessary):
-	if jsonSchemaType.Type == gojsonschema.TYPE_OBJECT {
+	if jsonSchemaType.Type == gojsonschema.TYPE_OBJECT && jsonSchemaType.Format != "int64" {
 
 		recordType, pkgName, ok := c.lookupType(curPkg, desc.GetTypeName())
 		if !ok {
