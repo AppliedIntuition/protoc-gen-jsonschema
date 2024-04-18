@@ -162,11 +162,12 @@ func (c *Converter) convertField(curPkg *ProtoPackage, desc *descriptor.FieldDes
 		if c.Flags.DisallowBigIntsAsStrings {
 			if messageFlags.AllowNullValues {
 				jsonSchemaType.OneOf = []*jsonschema.Type{
-					{Type: gojsonschema.TYPE_INTEGER},
+					{Type: gojsonschema.TYPE_INTEGER, Format: "int64"},
 					{Type: gojsonschema.TYPE_NULL},
 				}
 			} else {
 				jsonSchemaType.Type = gojsonschema.TYPE_INTEGER
+				jsonSchemaType.Format = "int64"
 			}
 		}
 
@@ -174,11 +175,12 @@ func (c *Converter) convertField(curPkg *ProtoPackage, desc *descriptor.FieldDes
 		if !c.Flags.DisallowBigIntsAsStrings {
 			if messageFlags.AllowNullValues {
 				jsonSchemaType.OneOf = []*jsonschema.Type{
-					{Type: gojsonschema.TYPE_STRING},
+					{Type: gojsonschema.TYPE_STRING, Format: "int64"},
 					{Type: gojsonschema.TYPE_NULL},
 				}
 			} else {
 				jsonSchemaType.Type = gojsonschema.TYPE_STRING
+				jsonSchemaType.Format = "int64"
 			}
 		}
 
@@ -348,7 +350,7 @@ func (c *Converter) convertField(curPkg *ProtoPackage, desc *descriptor.FieldDes
 	}
 
 	// Recurse nested objects / arrays of objects (if necessary):
-	if jsonSchemaType.Type == gojsonschema.TYPE_OBJECT {
+	if jsonSchemaType.Type == gojsonschema.TYPE_OBJECT && jsonSchemaType.Format != "int64" {
 
 		recordType, pkgName, ok := c.lookupType(curPkg, desc.GetTypeName())
 		if !ok {

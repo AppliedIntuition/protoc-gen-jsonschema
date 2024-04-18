@@ -233,7 +233,8 @@ const MessageKind12 = `{
                     "type": "boolean"
                 },
                 "baz": {
-                    "type": "string"
+                    "type": "string",
+                    "format": "int64"
                 }
             },
             "additionalProperties": true,
